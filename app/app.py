@@ -3,9 +3,18 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
+@app.get('/health/live')
+def live():
+    return jsonify(status='alive')
+
+@app.get('/health/ready')
+def ready():
+    # This example API has no external dependency to check before serving traffic.
+    return jsonify(status='ready')
+
 @app.get('/health')
-def health():
-    return jsonify(status='ok')
+def health_alias():
+    return live()
 
 @app.post('/telemetry')
 def telemetry():

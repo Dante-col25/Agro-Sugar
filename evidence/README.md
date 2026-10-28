@@ -6,8 +6,8 @@ Capturas de consola compartidas por el equipo. Se conservan como JPG originales 
 
 | Archivo | Qué muestra | Observación |
 |---|---|---|
-| [01-health-and-image.jpg](docker/01-health-and-image.jpg) | Respuesta HTTP 200 de `/health/live` y la imagen `agrosugar/telemetry-api:1.0.0`. | La respuesta es `status: alive`; esta etiqueta es distinta de la imagen local de ejemplo del repositorio. |
-| [02-build-and-container-run.jpg](docker/02-build-and-container-run.jpg) | Build exitoso, etiqueta de imagen y ejecución de contenedor con CPU, memoria y PIDs limitados. | La captura corresponde a `agrosugar/telemetry-api:1.0.0`, no al código de ejemplo agregado después a `app/`. |
+| [01-health-and-image.jpg](docker/01-health-and-image.jpg) | Respuesta HTTP 200 de `/health/live` y la imagen `agrosugar/telemetry-api:1.0.0`. | La aplicación actual reproduce esa ruta y respuesta; el código fuente de la imagen original no estaba en los archivos recibidos. |
+| [02-build-and-container-run.jpg](docker/02-build-and-container-run.jpg) | Build exitoso, etiqueta de imagen y ejecución de contenedor con CPU, memoria y PIDs limitados. | El Dockerfile actual reproduce la etiqueta y los límites principales, pero no se afirma que reconstruya el mismo binario de aquella sesión. |
 | [03-stats-cgroups-and-processes.jpg](docker/03-stats-cgroups-and-processes.jpg) | `docker stats`, límites inspeccionados, procesos del contenedor y valores cgroup. | Se observan 512 MiB, cuota CPU 1.0 y límite de 128 PIDs. |
 
 ## Kubernetes
@@ -29,4 +29,11 @@ Capturas de consola compartidas por el equipo. Se conservan como JPG originales 
 
 ## Límites de estas evidencias
 
-Las capturas Docker muestran una imagen/tag anterior (`agrosugar/telemetry-api:1.0.0`); el directorio `app/` es una base de ejemplo agregada al repositorio y no debe atribuirse a esa ejecución. Las capturas de virsh corresponden a QEMU emulado. El HPA de las capturas permite hasta 8 Pods; por coherencia, `k8s/telemetry.yaml` también usa `maxReplicas: 8`.
+El directorio `app/` es una reconstrucción de ejemplo con el comportamiento de salud visible en las capturas; no se recibió el código fuente original para comprobar identidad con esa imagen. Las capturas de virsh corresponden a QEMU emulado. El HPA de las capturas permite hasta 8 Pods; por coherencia, `k8s/telemetry.yaml` también usa `maxReplicas: 8`.
+
+## Evidencia todavía pendiente
+
+- Namespaces PID/NET/MNT: ejecutar `scripts/check-container-namespaces.sh telemetry-api` en el host Docker y guardar la salida real.
+- Manifiestos finales: volver a desplegar `k8s/` y capturar Pods, Ingress, HPA, PVC y CronJob; las capturas existentes no muestran todos esos objetos.
+- Host y EPT: ejecutar `virtualization/diagnostico.sh` en el host Linux de laboratorio. Si el host no ofrece KVM, conservar el resultado negativo; no simular una lectura de EPT.
+- Cloud bursting: el Job/script incluidos son una demostración dependiente de un clúster de nube configurado, imagen accesible y datos de prueba. Todavía falta ejecutar el flujo con imágenes NDVI y almacenamiento real.

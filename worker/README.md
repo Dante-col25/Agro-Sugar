@@ -1,3 +1,5 @@
-# worker
+# Worker de ejemplo para lotes NDVI
 
-Procesamiento por lotes NDVI. El informe lo modela como Job/CronJob, pero registra que el worker real no se ejecutó en el laboratorio. Marcar simulaciones con claridad.
+Lee un arreglo JSON de valores NDVI y escribe cantidad y promedio. No lee ni procesa rásteres de drones o satélite. Se incluye como demostración del ciclo Job/CronJob; reemplazar por el worker real antes de presentar procesamiento geoespacial.
+
+La entrada del CronJob local se proporciona en `k8s/ndvi-batch.yaml` mediante un ConfigMap de valores ficticios. Para datos reales, usar almacenamiento de objetos o un volumen compartido y añadir transferencia/retención verificable.

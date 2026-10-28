@@ -6,6 +6,11 @@ metadata:
     app: telemetry-api
 spec:
   replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: telemetry-api
@@ -16,11 +21,21 @@ spec:
     spec:
       containers:
         - name: api
-          image: agro-sugar/telemetry-api:local
+          image: agrosugar/telemetry-api:1.0.0
           imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: [ALL]
           ports:
             - name: http
               containerPort: 8080
+          volumeMounts:
+            - name: gunicorn-tmp
+              mountPath: /dev/shm
           resources:
             requests:
               cpu: 100m
@@ -30,16 +45,21 @@ spec:
               memory: 512Mi
           readinessProbe:
             httpGet:
-              path: /health
+              path: /health/ready
               port: http
             initialDelaySeconds: 3
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: /health
+              path: /health/live
               port: http
             initialDelaySeconds: 10
             periodSeconds: 10
+      volumes:
+        - name: gunicorn-tmp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi
 ---
 apiVersion: v1
 kind: Service

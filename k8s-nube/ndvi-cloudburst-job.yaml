@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ndvi-cloudburst-input
+  namespace: ${NDVI_NAMESPACE}
+data:
+  ndvi-input.json: '${NDVI_VALUES_JSON}'
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ndvi-cloudburst
+  namespace: ${NDVI_NAMESPACE}
+  labels:
+    app.kubernetes.io/name: ndvi-worker
+    app.kubernetes.io/managed-by: agrosugar-burst
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 7200
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ndvi-worker
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: worker
+          image: ${NDVI_WORKER_IMAGE}
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NDVI_INPUT
+              value: /input/ndvi-input.json
+            - name: NDVI_OUTPUT
+              value: /tmp/ndvi-summary.json
+          resources:
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            limits:
+              cpu: "2"
+              memory: 4Gi
+          volumeMounts:
+            - name: input
+              mountPath: /input
+              readOnly: true
+      volumes:
+        - name: input
+          configMap:
+            name: ndvi-cloudburst-input
