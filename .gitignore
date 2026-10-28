@@ -1,0 +1,26 @@
+# Secretos y credenciales
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*id_rsa*
+user-data*.yaml
+!user-data*.yaml.example
+
+# Datos y artefactos locales
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+*.qcow2
+*.img
+*.iso
+*.log
+
+# Original input documents stay in the working folder; curated report copy is in docs/
+/guia-avance2-proyecto-integrador-abpr.pdf
+/AgroSugar-IoT_Avance2_v3_con_evidencias.docx
