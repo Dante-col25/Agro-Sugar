@@ -1,3 +1,3 @@
-# evidence/virsh
+# Evidencias de virsh y almacenamiento
 
-Capturas originales de virsh y qemu-img. Añadir fecha/contexto y ocultar datos sensibles. La evidencia de laboratorio es QEMU emulado.
+[Índice de capturas](../README.md)

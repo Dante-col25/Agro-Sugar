@@ -48,6 +48,10 @@ Para documentar auto-sanación, elimina un Pod administrado por un Deployment y 
 - [ ] Revisar que no haya secretos ni datos sensibles en el historial Git.
 - [ ] Verificar integrantes, docente y versiones de herramientas en el informe.
 
+## Evidencias adjuntas
+
+Las capturas originales del laboratorio están en [evidence/](evidence/), con un índice por herramienta y notas sobre su alcance. Las capturas Docker pertenecen a `agrosugar/telemetry-api:1.0.0`; el código de ejemplo actual en `app/` no se atribuye a esa ejecución. La evidencia de virtualización es QEMU emulado (`domain type='qemu'`), no KVM acelerado.
+
 ## Construcción local del ejemplo
 
 El código en `app/` y `worker/` es una base didáctica preparada para organizar el repositorio; no se afirma que sea el código usado para generar las capturas del informe. El worker procesa una lista pequeña de valores NDVI de ejemplo, no imágenes satelitales. Reemplacen o validen esta base con el código real del equipo antes de la entrega.

@@ -1,3 +1,3 @@
-# evidence/kubernetes
+# Evidencias Kubernetes
 
-Capturas originales de pods, HPA y auto-sanación. Indicar qué pruebas fueron simuladas.
+[Índice de capturas](../README.md)
