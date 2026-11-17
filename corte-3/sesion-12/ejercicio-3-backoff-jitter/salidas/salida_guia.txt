@@ -1,0 +1,2 @@
+Jitter=False: pico = 10000
+Jitter=True: pico = 37

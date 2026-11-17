@@ -1,0 +1,4 @@
+sin_jitter: pico/ms = 10000, segundos sobre C = 1
+jitter_fijo: pico/ms = 37, segundos sobre C = 1
+full_jitter: pico/ms = 14, segundos sobre C = 2
+Gráfica guardada: histograma_jitter.png

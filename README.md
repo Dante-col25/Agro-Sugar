@@ -1,6 +1,15 @@
-# AgroSugar-IoT — Avance 2
+# AgroSugar-IoT — Repositorio del proyecto
 
-Repositorio del equipo para la entrega de Arquitectura de Sistemas Computacionales (UNIAJC), caso AgroSugar. El informe técnico está en [docs/informe-avance2.docx](docs/informe-avance2.docx).
+Repositorio del equipo para los cortes del proyecto integrador de Arquitectura de Sistemas Computacionales (UNIAJC), caso AgroSugar.
+
+| Corte | Contenido |
+|---|---|
+| Corte 2 | [Informe técnico](docs/informe-avance2.docx), aplicación, contenedores, Kubernetes, virtualización y evidencias. |
+| Corte 3 · Sesión 12 | [Índice de ejercicios](corte-3/sesion-12/README.md): trazabilidad, resiliencia y backoff/jitter. |
+
+## Corte 2 · Avance 2
+
+El informe técnico está en [docs/informe-avance2.docx](docs/informe-avance2.docx).
 
 ## Alcance
 
@@ -18,6 +27,7 @@ Este repositorio separa el diseño reproducible de la evidencia del laboratorio.
 - `virtualization/`: comandos, XML de referencia y configuración de laboratorio KVM/QEMU.
 - `evidence/`: capturas originales organizadas por herramienta. Añadir solo capturas reales y sanitizadas.
 - `docs/`: informe de Avance 2.
+- `corte-3/sesion-12/`: ejercicios, informe, código, salidas y evidencias del tercer corte.
 
 ## Entorno documentado
 

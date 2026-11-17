@@ -13,6 +13,7 @@ __pycache__/
 *.py[cod]
 .venv/
 venv/
+venv-otel/
 .pytest_cache/
 .DS_Store
 Thumbs.db
@@ -20,6 +21,9 @@ Thumbs.db
 *.img
 *.iso
 *.log
+
+# Salida generada al ejecutar la simulación de backoff desde la carpeta del ejercicio
+/corte-3/sesion-12/ejercicio-3-backoff-jitter/histograma_jitter.png
 
 # Original input documents stay in the working folder; curated report copy is in docs/
 /guia-avance2-proyecto-integrador-abpr.pdf

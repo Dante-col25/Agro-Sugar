@@ -1,0 +1,63 @@
+# PriorityClass para alertas UCI (máxima prioridad)
+apiVersion: scheduling.k8s.io/v1
+kind: PriorityClass
+metadata:
+  name: uci-critica
+value: 1000000
+globalDefault: false
+description: "Alertas críticas UCI - Nunca desalojar"
+---
+# Deployment Alertas UCI - QoS Guaranteed (requests = limits)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alertas-uci
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alertas-uci
+  template:
+    metadata:
+      labels:
+        app: alertas-uci
+    spec:
+      priorityClassName: uci-critica
+      containers:
+      - name: alertas-uci
+        image: hospitvalle/alertas-uci:latest
+        resources:
+          requests:
+            cpu: "2"
+            memory: "1Gi"
+          limits:
+            cpu: "2"
+            memory: "1Gi"
+        # => cpu.max "200000 100000" (2 vCPU garantizadas)
+---
+# Deployment Cliente IA - Límite estricto
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cliente-ia-nube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cliente-ia
+  template:
+    metadata:
+      labels:
+        app: cliente-ia
+    spec:
+      containers:
+      - name: cliente-ia
+        image: hospitvalle/cliente-ia:latest
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+        # => cpu.max "100000 100000" (1 vCPU máximo)

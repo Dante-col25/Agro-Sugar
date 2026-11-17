@@ -1,0 +1,220 @@
+
+======================================
+ INICIANDO TRAZABILIDAD - AGROSUGAR
+======================================
+Sensor: sensor045
+Cultivo: cultivo_cafe_01
+
+[SPAN RAIZ] Sensor IoT AgroSugar
+
+>>> Enviando contexto a: salto1.edge-mqtt
+traceparent: 00-52c29a7c8157cea8409aa280f86542ae-03b12898bd43f341-03
+Procesando salto1.edge-mqtt...
+Finalizado: salto1.edge-mqtt (12 ms)
+
+>>> Enviando contexto a: salto2.api-gateway
+traceparent: 00-52c29a7c8157cea8409aa280f86542ae-a34d76c0345be556-03
+Procesando salto2.api-gateway...
+Finalizado: salto2.api-gateway (8 ms)
+
+>>> Enviando contexto a: salto3.ingesta-service
+traceparent: 00-52c29a7c8157cea8409aa280f86542ae-18c6399194e4a3e0-03
+Procesando salto3.ingesta-service...
+Finalizado: salto3.ingesta-service (45 ms)
+
+>>> Enviando contexto a: salto4.timescaledb.insert
+traceparent: 00-52c29a7c8157cea8409aa280f86542ae-325a43812356805d-03
+Procesando salto4.timescaledb.insert...
+Finalizado: salto4.timescaledb.insert (3 ms)
+{
+    "name": "salto4.timescaledb.insert",
+    "context": {
+        "trace_id": "0x52c29a7c8157cea8409aa280f86542ae",
+        "span_id": "0xa8c2210e33a83f73",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x325a43812356805d",
+    "start_time": "2026-11-14T18:36:44.991401Z",
+    "end_time": "2026-11-14T18:36:44.995341Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "service.name": "salto4.timescaledb.insert",
+        "network.protocol.name": "postgresql",
+        "tenant": "agrosugar",
+        "db.system": "postgresql",
+        "db.operation": "INSERT",
+        "db.name": "agrosugar"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "ea67b2c2-5d13-4404-ac6a-544966250dd0",
+            "service.name": "AgroSugar",
+            "service.namespace": "agricultura-iot",
+            "deployment.environment": "pruebas"
+        },
+        "schema_url": ""
+    }
+}
+{
+    "name": "salto3.ingesta-service",
+    "context": {
+        "trace_id": "0x52c29a7c8157cea8409aa280f86542ae",
+        "span_id": "0x325a43812356805d",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x18c6399194e4a3e0",
+    "start_time": "2026-11-14T18:36:44.941350Z",
+    "end_time": "2026-11-14T18:36:44.996283Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "service.name": "salto3.ingesta-service",
+        "network.protocol.name": "http",
+        "tenant": "agrosugar",
+        "measurement.type": "soil_moisture"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "ea67b2c2-5d13-4404-ac6a-544966250dd0",
+            "service.name": "AgroSugar",
+            "service.namespace": "agricultura-iot",
+            "deployment.environment": "pruebas"
+        },
+        "schema_url": ""
+    }
+}
+{
+    "name": "salto2.api-gateway",
+    "context": {
+        "trace_id": "0x52c29a7c8157cea8409aa280f86542ae",
+        "span_id": "0x18c6399194e4a3e0",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0xa34d76c0345be556",
+    "start_time": "2026-11-14T18:36:44.932503Z",
+    "end_time": "2026-11-14T18:36:44.996824Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "service.name": "salto2.api-gateway",
+        "network.protocol.name": "http",
+        "tenant": "agrosugar",
+        "gateway.name": "api-gateway"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "ea67b2c2-5d13-4404-ac6a-544966250dd0",
+            "service.name": "AgroSugar",
+            "service.namespace": "agricultura-iot",
+            "deployment.environment": "pruebas"
+        },
+        "schema_url": ""
+    }
+}
+{
+    "name": "salto1.edge-mqtt",
+    "context": {
+        "trace_id": "0x52c29a7c8157cea8409aa280f86542ae",
+        "span_id": "0xa34d76c0345be556",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": "0x03b12898bd43f341",
+    "start_time": "2026-11-14T18:36:44.912252Z",
+    "end_time": "2026-11-14T18:36:44.997394Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "service.name": "salto1.edge-mqtt",
+        "network.protocol.name": "mqtt",
+        "tenant": "agrosugar",
+        "sensor.id": "sensor045"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "ea67b2c2-5d13-4404-ac6a-544966250dd0",
+            "service.name": "AgroSugar",
+            "service.namespace": "agricultura-iot",
+            "deployment.environment": "pruebas"
+        },
+        "schema_url": ""
+    }
+}
+
+[OK] Flujo de datos completado.
+{
+    "name": "root.sensor-agrosugar",
+    "context": {
+        "trace_id": "0x52c29a7c8157cea8409aa280f86542ae",
+        "span_id": "0x03b12898bd43f341",
+        "trace_state": "[]"
+    },
+    "kind": "SpanKind.INTERNAL",
+    "parent_id": null,
+    "start_time": "2026-11-14T18:36:44.912130Z",
+    "end_time": "2026-11-14T18:36:44.997564Z",
+    "status": {
+        "status_code": "UNSET"
+    },
+    "attributes": {
+        "sensor.id": "sensor045",
+        "crop.id": "cultivo_cafe_01",
+        "measurement.type": "soil_moisture",
+        "tenant": "agrosugar"
+    },
+    "events": [],
+    "links": [],
+    "resource": {
+        "attributes": {
+            "telemetry.sdk.language": "python",
+            "telemetry.sdk.name": "opentelemetry",
+            "telemetry.sdk.version": "1.45.2",
+            "service.instance.id": "ea67b2c2-5d13-4404-ac6a-544966250dd0",
+            "service.name": "AgroSugar",
+            "service.namespace": "agricultura-iot",
+            "deployment.environment": "pruebas"
+        },
+        "schema_url": ""
+    }
+}
+
+======================================
+ RESUMEN DE LATENCIAS SIMULADAS
+======================================
+edge: 12 ms (17.6%)
+api: 8 ms (11.8%)
+ingesta: 45 ms (66.2%)
+database: 3 ms (4.4%)
+
+Latencia simulada total: 68 ms
+Tiempo total observado: 85.65 ms
+
+Trazabilidad AgroSugar finalizada.
