@@ -1,103 +1,82 @@
-# AgroSugar-IoT — Repositorio del proyecto
+# AgroSugar-IoT
 
-Repositorio del equipo para los cortes del proyecto integrador de Arquitectura de Sistemas Computacionales (UNIAJC), caso AgroSugar.
+**Proyecto Integrador · Arquitectura de Sistemas Computacionales · UNIAJC**  
+Caso: monitoreo de cultivo de caña de azúcar con Edge, contenedores y Kubernetes.
 
-| Corte | Contenido |
-|---|---|
-| Corte 2 | [Informe técnico](docs/informe-avance2.docx), aplicación, contenedores, Kubernetes, virtualización y evidencias. |
-| Corte 3 · Sesión 12 | [Índice de ejercicios](corte-3/sesion-12/README.md): trazabilidad, resiliencia y backoff/jitter. |
+[Informe Avance 2](docs/informe-avance2.docx) · [Corte 3 / Sesión 12](corte-3/sesion-12/README.md) · [Gestión ágil propuesta](gestion-agil/README.md) · [Evidencias](evidence/README.md)
 
-## Corte 2 · Avance 2
+> **Estado:** repositorio académico con diseño, ejemplos de código y resultados de laboratorio. Las capacidades de producción descritas son propuestas; se indican las pruebas que siguen pendientes.
 
-El informe técnico está en [docs/informe-avance2.docx](docs/informe-avance2.docx).
+## Arquitectura propuesta
 
-## Alcance
+```mermaid
+flowchart LR
+    S[Maquinaria y sensores] --> E[Edge<br/>alertas locales<br/>buffer hasta 24 h]
+    E -->|sincronización objetivo menor a 2 s| API
 
-El diseño documenta la ruta KVM/QEMU → Docker → Kubernetes (k3s) y el procesamiento por lotes NDVI con posibilidad de Cloud Bursting. La alerta crítica menor a 100 ms permanece en Edge; Kubernetes no forma parte de ese camino crítico.
+    subgraph PLANTA[Planta · diseño propuesto]
+        H[Servidores físicos<br/>activo y pasivo] --> KVM[KVM<br/>propuesto en producción]
+        KVM --> VM[VM Linux]
+        VM --> K3S[k3s / Kubernetes]
+        K3S --> API[API de telemetría<br/>Deployment · Service · Ingress · HPA]
+        K3S --> NDVI[Procesamiento NDVI<br/>Job / CronJob]
+    end
 
-Este repositorio separa el diseño reproducible de la evidencia del laboratorio. El informe registra que el laboratorio usó QEMU emulado porque KVM/EPT no estuvo disponible, y que el clúster k3s tenía un solo nodo. No se reportan como ejecutados el bursting ni la medición real del PUE. Consulta la matriz de evidencias del informe antes de presentar resultados.
-
-## Estructura
-
-- `app/`: API de telemetría y su imagen Docker.
-- `worker/`: plantilla para trabajos por lotes NDVI.
-- `k8s/`: manifiestos Kubernetes para el entorno local.
-- `k8s-nube/`: punto de partida para los trabajos en nube; requiere completar proveedor, almacenamiento y credenciales mediante secretos.
-- `scripts/`: operaciones auxiliares de despliegue/bursting.
-- `virtualization/`: comandos, XML de referencia y configuración de laboratorio KVM/QEMU.
-- `evidence/`: capturas originales organizadas por herramienta. Añadir solo capturas reales y sanitizadas.
-- `docs/`: informe de Avance 2.
-- `corte-3/sesion-12/`: ejercicios, informe, código, salidas y evidencias del tercer corte.
-
-## Entorno documentado
-
-- Ubuntu Server en las VM del diseño; Docker; Kubernetes ligero k3s en laboratorio.
-- Las versiones exactas deben registrarse con `uname -a`, `docker version`, `kubectl version` y `virsh version` antes de cerrar la entrega.
-- No guardar contraseñas, claves SSH, tokens ni archivos `.env` en Git. Los datos de acceso se inyectan fuera del repositorio.
-
-## Verificaciones del laboratorio
-
-Usa estos comandos en el entorno donde se hizo la práctica y guarda la salida o captura en `evidence/`:
-
-```bash
-virsh list --all
-docker stats --no-stream
-kubectl get nodes -o wide
-kubectl get pods -o wide
-kubectl get deployments,services,ingress,hpa,cronjobs,pvc
+    DOCKER[Docker build] --> IMG[Imagen de contenedor]
+    IMG --> K3S
+    NDVI --> BR{Pico de cosecha}
+    BR -->|si aplica| CLOUD[Job en nube<br/>diseño; aún no ejecutado]
 ```
 
-Para documentar auto-sanación, elimina un Pod administrado por un Deployment y observa su reposición: `kubectl delete pod <pod>`, seguido de `kubectl get pods -w`. Anota hora inicial, hora de disponibilidad y contexto del clúster. No sustituyas capturas por salidas transcritas.
+El diseño mantiene las alertas críticas en Edge, con una meta menor a 100 ms. Kubernetes administra los servicios y los lotes; no está en el camino de control crítico. El diagrama representa la arquitectura propuesta, no un despliegue integral probado.
 
-## Estado antes de entregar
+## Estado de las capacidades
 
-- [ ] Revisar los manifiestos finales y validar CPU/memoria (requests y limits).
-- [ ] Ejecutar `scripts/check-container-namespaces.sh telemetry-api` y adjuntar la salida real de PID, NET y MNT.
-- [ ] Adjuntar capturas auténticas de `virsh list`, `docker stats` y `kubectl get pods`.
-- [ ] Aplicar los manifiestos actuales y adjuntar la salida de Pods, Ingress, HPA, PVC y CronJob.
-- [ ] Capturar salida real del host (`lscpu`, `free`, `lsblk`, `virt-host-validate`) y EPT solo si KVM está disponible.
-- [ ] Adjuntar evidencia de eliminación y reposición del Pod.
-- [ ] Registrar claramente funcionalidades no ejecutadas o simuladas.
-- [ ] Revisar que no haya secretos ni datos sensibles en el historial Git.
-- [ ] Verificar integrantes, docente y versiones de herramientas en el informe.
+| Área | Evidencia disponible | Límite actual |
+|---|---|---|
+| Docker | Construcción y ejecución de `telemetry-api`; límites visibles con `docker stats` y cgroups. | El código del repositorio reproduce las rutas observadas, pero no se recibió el código fuente original de la imagen capturada. |
+| Kubernetes | Capturas de Pods, auto-sanación y eventos de HPA en k3s de un nodo. | Los manifiestos actuales aún requieren ejecución y captura conjunta de Ingress, PVC y CronJob. |
+| Virtualización | `virsh`, QEMU y discos qcow2 thin. | Las VM del laboratorio fueron emuladas con QEMU; KVM acelerado y EPT no se demostraron. |
+| Trazabilidad y resiliencia | Salidas de simulación OpenTelemetry, Circuit Breaker, Bulkhead y backoff/jitter. | Las simulaciones no son mediciones de producción; el ejemplo UCI corresponde a HospitValle. |
+| NDVI y nube | Manifiestos de ejemplo para Job/CronJob y una base de Cloud Bursting. | El worker usa datos numéricos de muestra; no procesa imágenes reales ni ejecuta bursting a una nube. |
+| SLA y energía | Cálculos de disponibilidad, PUE y costos documentados. | PUE y costos están basados en supuestos; falta medirlos con datos reales. |
 
-## Evidencias adjuntas
+## Recorrido del repositorio
 
-Las capturas originales del laboratorio están en [evidence/](evidence/), con un índice por herramienta y notas sobre su alcance. El código de ejemplo en `app/` ofrece las rutas `/health/live` y `/health/ready` que usan las sondas; el Dockerfile también incluye healthcheck y Gunicorn con `/dev/shm`. El origen de la imagen capturada no estaba en los archivos recibidos, así que la implementación actual reproduce el comportamiento visible, pero no demuestra ser el mismo código binario. La evidencia de virtualización es QEMU emulado (`domain type='qemu'`), no KVM acelerado.
+| Carpeta | Contenido |
+|---|---|
+| `app/`, `worker/` | API y worker de ejemplo con Dockerfiles. |
+| `k8s/`, `k8s-nube/` | Manifiestos de Kubernetes local y demostración de Job en nube. |
+| `virtualization/`, `scripts/` | Diagnósticos y scripts de captura/operación. |
+| `evidence/` | Capturas de Docker, Kubernetes y virtualización, con notas de alcance. |
+| `docs/` | Informe técnico de Avance 2. |
+| `corte-3/sesion-12/` | Ejercicios de trazabilidad, resiliencia y backoff/jitter. |
+| `gestion-agil/` | Visión, backlog, plan de sprints y criterios de terminado propuestos. |
 
-## Construcción local del ejemplo
+## Inicio rápido · API de ejemplo
 
-El código en `app/` y `worker/` es una base didáctica preparada para organizar el repositorio; no se afirma que sea el código usado para generar las capturas del informe. El worker procesa una lista pequeña de valores NDVI de ejemplo, no imágenes satelitales. Reemplacen o validen esta base con el código real del equipo antes de la entrega.
-
-Para construir las imágenes en Docker:
+Desde la raíz del repositorio:
 
 ```bash
 docker build -t agrosugar/telemetry-api:1.0.0 ./app
-docker build -t agrosugar/ndvi-worker:1.0.0 ./worker
+docker run --rm -p 8080:8080 agrosugar/telemetry-api:1.0.0
+curl -i http://localhost:8080/health/live
 ```
 
-En k3s, asegúrate de que las imágenes estén disponibles en el runtime del clúster antes de aplicar `k8s/`. Si Docker está separado de containerd de k3s, puedes exportarlas e importarlas así:
+Para Kubernetes, revisa primero [`k8s/README.md`](k8s/README.md): k3s usa su propio runtime de contenedores, por lo que la imagen debe estar cargada en el nodo o publicada en un registry accesible. Los comandos de laboratorio y de Cloud Bursting requieren el entorno correspondiente; consulta sus README antes de ejecutarlos.
 
-```bash
-docker save agrosugar/telemetry-api:1.0.0 -o /tmp/telemetry-api.tar
-docker save agrosugar/ndvi-worker:1.0.0 -o /tmp/ndvi-worker.tar
-sudo k3s ctr images import /tmp/telemetry-api.tar
-sudo k3s ctr images import /tmp/ndvi-worker.tar
-kubectl apply -f k8s/telemetry.yaml
-kubectl apply -f k8s/ndvi-batch.yaml
-```
+## Cómo se organiza el trabajo
 
-El HPA necesita métricas de CPU disponibles; verifica el estado de metrics-server y del controlador Ingress del clúster. El host `telemetry.agrosugar.local` es un nombre de ejemplo que debe resolverse al Ingress local.
+La carpeta [`gestion-agil/`](gestion-agil/README.md) contiene una propuesta Scrum basada en los entregables y evidencias actuales. No es un registro histórico de ceremonias celebradas ni de roles ya asignados. Los cambios pueden incorporarse con historias de usuario, criterios de aceptación y evidencia enlazada desde GitHub Issues.
 
-Para recopilar evidencia de aislamiento PID/NET/MNT y límites en el mismo contenedor:
+## Seguridad y evidencia
 
-```bash
-docker run -d --name telemetry-api -p 8080:8080 --cpus=1.0 --memory=512m --pids-limit=128 agrosugar/telemetry-api:1.0.0
-./scripts/check-container-namespaces.sh telemetry-api | tee evidence/docker/namespaces-host.txt
-docker stats --no-stream telemetry-api
-docker rm -f telemetry-api
-```
+- No publiques contraseñas, tokens, claves privadas ni archivos `.env`.
+- Conserva las capturas originales y etiqueta claramente las simulaciones y los datos supuestos.
+- No presentes el diseño KVM/EPT, el procesamiento de imágenes NDVI, el bursting o el PUE real como funcionalidades probadas.
 
-Guarda `namespaces-host.txt` solo después de ejecutar los comandos en el host Linux; no lo generes a partir de valores esperados.
+## Referencias
 
-Los manifiestos son un punto de partida y pueden requerir ajustes según StorageClass, IngressClass, registry y configuración de k3s. `k8s/telemetry.yaml` usa el tag mostrado en la captura; para desplegarlo hay que construir esa imagen y cargarla en el runtime de k3s o publicarla en un registry accesible.
+- [Guía de entrega de Avance 2](guia-avance2-proyecto-integrador-abpr.pdf)
+- [Informe técnico de Avance 2](docs/informe-avance2.docx)
+- [Guía Scrum oficial en español](https://scrumguides.org/docs/scrumguide/v2020/2020-Scrum-Guide-Spanish-Latin-South-American.pdf)

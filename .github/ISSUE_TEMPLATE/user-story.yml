@@ -1,0 +1,54 @@
+name: Historia de usuario
+description: Registrar un requisito con valor y criterios verificables
+title: "[HU] "
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: Historia
+      description: Describe el usuario, lo que necesita y el valor que obtiene.
+      placeholder: Como ..., quiero ..., para ...
+    validations:
+      required: true
+  - type: input
+    id: epic
+    attributes:
+      label: Épica o objetivo relacionado
+    validations:
+      required: false
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad sugerida
+      options:
+        - P1 · Alta
+        - P2 · Media
+        - P3 · Baja
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Criterios de aceptación
+      description: Escribe condiciones observables y comprobables.
+      placeholder: "- Dado ... cuando ... entonces ..."
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Estado de evidencia
+      options:
+        - Propuesta
+        - En progreso
+        - Simulado
+        - Validado en laboratorio
+        - Validado en campo
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencias, supuestos o bloqueos
+    validations:
+      required: false

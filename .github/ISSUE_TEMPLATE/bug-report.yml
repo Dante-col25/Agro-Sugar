@@ -1,0 +1,37 @@
+name: Defecto o problema técnico
+description: Registrar un comportamiento que no cumple lo esperado
+title: "[BUG] "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Qué ocurrió
+      description: Describe el resultado observado.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Qué se esperaba
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Pasos para reproducir
+      placeholder: "1. ...\n2. ...\n3. ..."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Entorno y versiones
+      placeholder: Ubuntu, Docker, k3s, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia o logs sin secretos
+    validations:
+      required: false
