@@ -69,11 +69,6 @@ Para Kubernetes, revisa primero [`k8s/README.md`](k8s/README.md): k3s usa su pro
 
 La carpeta [`gestion-agil/`](gestion-agil/README.md) contiene una propuesta Scrum basada en los entregables y evidencias actuales. No es un registro histórico de ceremonias celebradas ni de roles ya asignados. Los cambios pueden incorporarse con historias de usuario, criterios de aceptación y evidencia enlazada desde GitHub Issues.
 
-## Seguridad y evidencia
-
-- No publiques contraseñas, tokens, claves privadas ni archivos `.env`.
-- Conserva las capturas originales y etiqueta claramente las simulaciones y los datos supuestos.
-- No presentes el diseño KVM/EPT, el procesamiento de imágenes NDVI, el bursting o el PUE real como funcionalidades probadas.
 
 ## Referencias
 
