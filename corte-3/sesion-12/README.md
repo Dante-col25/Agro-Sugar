@@ -1,7 +1,5 @@
 # Corte 3 · Sesión 12
 
-Material organizado por ejercicio, con código, salidas, evidencias y el informe que venía en el ZIP. Los archivos fuente se conservaron; los nombres se normalizaron para que sea más fácil encontrarlos.
-
 ## Índice
 
 | Ejercicio | Tema | Contenido |
@@ -13,10 +11,10 @@ Material organizado por ejercicio, con código, salidas, evidencias y el informe
 ## Criterio de organización
 
 - Las capturas originales se guardan en `evidencias/`; las salidas de texto en `salidas/`; las figuras en `graficas/`.
-- El entorno virtual `venv-otel/` del ZIP se excluyó: no es portable y contenía cientos de archivos de paquetes instalados. Sus versiones relevantes quedaron fijadas en `ejercicio-1-trazabilidad/requirements.txt`.
+- El entorno virtual `venv-otel/` del ZIP se excluyó: no es portable y como contenía cientos de archivos de paquetes instalados. Entonces sus versiones relevantes quedaron fijadas en `ejercicio-1-trazabilidad/requirements.txt`.
 - No se incluyen bytecode, cachés ni ejecutables del entorno virtual.
 - Los resultados de simulación se mantienen como resultados del ejercicio; no se presentan como mediciones de producción.
-- Antes de entregar, completar los campos de integrantes, fecha y URL del repositorio que siguen pendientes en el informe del Ejercicio 3.
+
 
 ## Alcance del caso
 
